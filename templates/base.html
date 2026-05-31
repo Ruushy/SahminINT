@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="csrf-token" content="{{ csrf_token }}">
+  <title>{% block title %}SahminINT{% endblock %}</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link rel="stylesheet" href="{% static 'css/main.css' %}">
+  {% block extra_head %}{% endblock %}
+</head>
+<body>
+  {% if user.is_authenticated %}
+  {% include "partials/sidebar.html" %}
+  {% endif %}
+
+  <div class="main-wrapper" id="main-wrapper">
+    {% if user.is_authenticated %}
+    {% include "partials/topbar.html" %}
+    {% endif %}
+
+    <main class="content-area" id="content-area">
+      {% include "partials/messages.html" %}
+
+      {% block content %}{% endblock %}
+    </main>
+
+    {% if user.is_authenticated %}
+    {% include "partials/content_footer.html" %}
+    {% endif %}
+  </div>
+
+  <div id="toast-container" aria-live="polite"></div>
+  <div id="loader-bar"></div>
+
+  <script src="{% static 'js/main.js' %}"></script>
+  {% block extra_js %}{% endblock %}
+</body>
+</html>

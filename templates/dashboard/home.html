@@ -1,0 +1,150 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}SahminINT — Dashboard{% endblock %}
+{% block content %}
+<div class="dashboard-page" id="dashboard-page">
+  <div class="page-header">
+    <h1 class="page-title"><i class="fas fa-th-large"></i> Dashboard</h1>
+    <p class="page-subtitle">Welcome back, <span class="accent">{{ user.username }}</span></p>
+  </div>
+
+  <!-- Stat Cards -->
+  <div class="stat-grid" id="stat-grid">
+    <div class="stat-card" id="stat-targets">
+      <div class="stat-icon"><i class="fas fa-crosshairs"></i></div>
+      <div class="stat-content">
+        <span class="stat-number">{{ stats.targets }}</span>
+        <span class="stat-label">Targets</span>
+      </div>
+    </div>
+    <div class="stat-card" id="stat-scans">
+      <div class="stat-icon"><i class="fas fa-radar"></i></div>
+      <div class="stat-content">
+        <span class="stat-number">{{ stats.recon_scans }}</span>
+        <span class="stat-label">Recon Scans</span>
+      </div>
+    </div>
+    <div class="stat-card" id="stat-subdomains">
+      <div class="stat-icon"><i class="fas fa-sitemap"></i></div>
+      <div class="stat-content">
+        <span class="stat-number">{{ stats.subdomains }}</span>
+        <span class="stat-label">Subdomains</span>
+      </div>
+    </div>
+    <div class="stat-card" id="stat-dns">
+      <div class="stat-icon"><i class="fas fa-network-wired"></i></div>
+      <div class="stat-content">
+        <span class="stat-number">{{ stats.dns }}</span>
+        <span class="stat-label">DNS Records</span>
+      </div>
+    </div>
+    <div class="stat-card" id="stat-dorks">
+      <div class="stat-icon"><i class="fas fa-search"></i></div>
+      <div class="stat-content">
+        <span class="stat-number">{{ stats.dorks }}</span>
+        <span class="stat-label">Saved Dorks</span>
+      </div>
+    </div>
+    <div class="stat-card" id="stat-reports">
+      <div class="stat-icon"><i class="fas fa-file-export"></i></div>
+      <div class="stat-content">
+        <span class="stat-number">{{ stats.reports }}</span>
+        <span class="stat-label">Reports</span>
+      </div>
+    </div>
+    <div class="stat-card" id="stat-modules">
+      <div class="stat-icon"><i class="fas fa-puzzle-piece"></i></div>
+      <div class="stat-content">
+        <span class="stat-number">{{ stats.modules }}</span>
+        <span class="stat-label">Passive Modules</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Quick Actions -->
+  <div class="section-header">
+    <h2><i class="fas fa-bolt"></i> Quick Actions</h2>
+  </div>
+  <div class="quick-actions-grid" id="quick-actions">
+    <a href="{% url 'targets:create' %}" class="btn btn-primary" id="btn-add-target"><i class="fas fa-plus"></i> New Target</a>
+    <a href="{% url 'dorking:google' %}" class="btn btn-ghost" id="btn-google-dorks"><i class="fab fa-google"></i> Google Dorks</a>
+    <a href="{% url 'dorking:github' %}" class="btn btn-ghost" id="btn-github-dorks"><i class="fab fa-github"></i> GitHub Dorks</a>
+    <a href="{% url 'dorking:browser_search' %}" class="btn btn-ghost" id="btn-browser-search"><i class="fas fa-globe"></i> Browser Search</a>
+    <a href="{% url 'recon:subdomain_list' %}" class="btn btn-ghost" id="btn-subdomains"><i class="fas fa-sitemap"></i> Subdomains</a>
+    <a href="{% url 'recon:dns_list' %}" class="btn btn-ghost" id="btn-dns"><i class="fas fa-network-wired"></i> DNS</a>
+    <a href="{% url 'reporting:generate' %}" class="btn btn-ghost" id="btn-report"><i class="fas fa-file-export"></i> Generate Report</a>
+    <a href="{% url 'targets:list' %}" class="btn btn-ghost" id="btn-targets"><i class="fas fa-crosshairs"></i> All Targets</a>
+  </div>
+
+  <!-- Recent Targets + Activity -->
+  <div class="dashboard-panels">
+    <div class="panel">
+      <div class="panel-header">
+        <h3><i class="fas fa-crosshairs"></i> Recent Targets</h3>
+        <a href="{% url 'targets:list' %}" class="panel-link">View all</a>
+      </div>
+      <div class="panel-body">
+        {% if recent_targets %}
+        <table class="table">
+          <thead>
+            <tr><th>Domain</th><th>Scans</th><th>Added</th></tr>
+          </thead>
+          <tbody>
+            {% for t in recent_targets %}
+            <tr>
+              <td><a href="{% url 'targets:detail' t.pk %}" class="mono">{{ t.domain }}</a></td>
+              <td>{{ t.scan_count }}</td>
+              <td class="text-muted">{{ t.created_at|date:"Y-m-d" }}</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+        {% else %}
+        <div class="empty-state">
+          <i class="fas fa-crosshairs"></i>
+          <p>No targets yet. <a href="{% url 'targets:create' %}">Add your first target</a></p>
+        </div>
+        {% endif %}
+      </div>
+    </div>
+    <div class="panel">
+      <div class="panel-header">
+        <h3><i class="fas fa-bolt"></i> Recent Activity</h3>
+        <a href="{% url 'dashboard:activity' %}" class="panel-link">View all</a>
+      </div>
+      <div class="panel-body">
+        {% if recent_activity %}
+        <div class="activity-feed">
+          {% for a in recent_activity %}
+          <div class="activity-item">
+            <span class="activity-icon"><i class="fas fa-circle"></i></span>
+            <div class="activity-content">
+              <span class="activity-action">{{ a.action }}</span>
+              {% if a.target_domain %}
+              <span class="activity-target mono">{{ a.target_domain }}</span>
+              {% endif %}
+              <span class="activity-time text-muted">{{ a.created_at|timesince }} ago</span>
+            </div>
+          </div>
+          {% endfor %}
+        </div>
+        {% else %}
+        <div class="empty-state">
+          <i class="fas fa-bolt"></i>
+          <p>No activity yet. Start exploring!</p>
+        </div>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+
+  <!-- Keyboard Shortcuts Hint -->
+  <div class="shortcuts-hint">
+    <span><kbd>/</kbd> Search</span>
+    <span><kbd>g</kbd> then <kbd>d</kbd> Dashboard</span>
+    <span><kbd>g</kbd> then <kbd>t</kbd> Targets</span>
+    <span><kbd>g</kbd> then <kbd>s</kbd> Subdomains</span>
+    <span><kbd>g</kbd> then <kbd>r</kbd> Reports</span>
+  </div>
+</div>
+{% endblock %}

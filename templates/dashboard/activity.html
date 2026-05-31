@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% block title %}Activity Feed{% endblock %}
+{% block content %}
+<div class="page-header">
+  <h1 class="page-title"><i class="fas fa-bolt"></i> Activity Feed</h1>
+</div>
+<div class="panel">
+  <div class="panel-body">
+    {% if activities %}
+    <div class="activity-feed">
+      {% for a in activities %}
+      <div class="activity-item">
+        <span class="activity-icon"><i class="fas fa-circle"></i></span>
+        <div class="activity-content">
+          <span class="activity-action">{{ a.action }}</span>
+          {% if a.target_domain %}
+          <span class="activity-target mono">{{ a.target_domain }}</span>
+          {% endif %}
+          <span class="activity-description text-muted">{{ a.description }}</span>
+          <span class="activity-time text-dim">{{ a.created_at|date:"Y-m-d H:i" }}</span>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+    {% else %}
+    <div class="empty-state">
+      <i class="fas fa-bolt"></i>
+      <p>No activity recorded yet.</p>
+    </div>
+    {% endif %}
+  </div>
+</div>
+{% endblock %}

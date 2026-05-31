@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+{% block title %}Generate Report{% endblock %}
+{% block content %}
+<div class="page-header">
+  <h1 class="page-title"><i class="fas fa-file-export"></i> Generate Report</h1>
+</div>
+<div class="panel">
+  <div class="panel-body">
+    <form method="POST" action="{% url 'reporting:generate' %}" class="auth-form" id="report-generate-form">
+      {% csrf_token %}
+      <div class="form-group">
+        <label for="id-title">Report Title</label>
+        <input type="text" name="title" id="id-title" class="form-input" placeholder="e.g. Recon Report - example.com" required>
+      </div>
+      <div class="form-group">
+        <label for="id-target">Target (optional)</label>
+        <select name="target_id" id="id-target" class="form-input">
+          <option value="">No target (general report)</option>
+          {% for t in targets %}
+          <option value="{{ t.pk }}">{{ t.domain }}</option>
+          {% endfor %}
+        </select>
+      </div>
+      <div class="form-group">
+        <label for="id-report-type">Report Type</label>
+        <select name="report_type" id="id-report-type" class="form-input">
+          <option value="full">Full Report (all modules)</option>
+          <option value="subdomains">Subdomains only</option>
+          <option value="dns">DNS Records only</option>
+          <option value="whois">WHOIS only</option>
+          <option value="wayback">Wayback Machine only</option>
+          <option value="tech">Technology only</option>
+          <option value="dorks">Saved Dorks only</option>
+        </select>
+      </div>
+      <button type="submit" class="btn btn-primary" id="btn-generate"><i class="fas fa-file-export"></i> Generate Report</button>
+    </form>
+  </div>
+</div>
+{% endblock %}

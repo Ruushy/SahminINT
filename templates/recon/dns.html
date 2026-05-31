@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+{% block title %}DNS Records{% endblock %}
+{% block content %}
+<div class="page-header">
+  <h1 class="page-title"><i class="fas fa-network-wired"></i> DNS Records</h1>
+  <div class="page-actions">
+    <form method="GET" class="filter-form" id="dns-filter">
+      <select name="target_id" class="form-input" onchange="this.form.submit()">
+        <option value="">All Targets</option>
+        {% for t in targets %}
+        <option value="{{ t.pk }}" {% if request.GET.target_id == t.pk|stringformat:"s" %}selected{% endif %}>{{ t.domain }}</option>
+        {% endfor %}
+      </select>
+      <button type="submit" class="btn btn-sm btn-ghost">Filter</button>
+    </form>
+  </div>
+</div>
+
+<div class="panel">
+  <div class="panel-body">
+    {% if records %}
+    <div class="dns-grid" id="dns-grid">
+      {% regroup records by record_type as type_list %}
+      {% for group in type_list %}
+      <div class="dns-card">
+        <h3 class="dns-type">{{ group.grouper }}</h3>
+        <div class="dns-values">
+          {% for r in group.list %}
+          <div class="dns-value-row">
+            <span class="mono">{{ r.value|truncatechars:120 }}</span>
+            <button class="btn-icon btn-copy" data-copy="{{ r.value }}" title="Copy"><i class="fas fa-copy"></i></button>
+          </div>
+          {% endfor %}
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+    {% else %}
+    <div class="empty-state">
+      <i class="fas fa-network-wired"></i>
+      <p>No DNS records. Select a target and run DNS lookup.</p>
+      <form method="POST" action="{% url 'recon:dns_run' %}" class="inline-form">
+        {% csrf_token %}
+        <select name="target_id" class="form-input" required>
+          <option value="">Select target...</option>
+          {% for t in targets %}
+          <option value="{{ t.pk }}">{{ t.domain }}</option>
+          {% endfor %}
+        </select>
+        <button type="submit" class="btn btn-primary" id="btn-run-dns-lookup"><i class="fas fa-play"></i> Run DNS Lookup</button>
+      </form>
+    </div>
+    {% endif %}
+  </div>
+</div>
+{% endblock %}

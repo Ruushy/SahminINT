@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+{% block title %}GitHub Dorks{% endblock %}
+{% block content %}
+<div class="page-header">
+  <h1 class="page-title"><i class="fab fa-github"></i> GitHub Dorks</h1>
+  <div class="page-actions">
+    <form method="GET" class="filter-form" id="dork-domain-form">
+      <input type="text" name="domain" class="form-input" placeholder="Enter domain..." value="{{ domain }}" id="dork-domain-input">
+      <button type="submit" class="btn btn-primary" id="btn-load-dorks"><i class="fas fa-search"></i> Load Dorks</button>
+    </form>
+  </div>
+</div>
+
+{% if results %}
+{% for cat in categories %}
+<div class="section-header">
+  <h3><i class="fas fa-tag"></i> {{ cat }}</h3>
+</div>
+<div class="panel">
+  <div class="panel-body">
+    <table class="table dork-table">
+      <thead><tr><th>Query</th><th>Actions</th></tr></thead>
+      <tbody>
+        {% for r in results %}
+        {% if r.category == cat %}
+        <tr class="dork-row">
+          <td class="mono dork-query-text">{{ r.query }}</td>
+          <td class="dork-actions">
+            <a href="{{ r.github }}" target="_blank" rel="noopener" class="btn btn-sm btn-ghost" title="Open in GitHub"><i class="fab fa-github"></i></a>
+            <button class="btn btn-sm btn-ghost btn-copy" data-copy="{{ r.query }}" title="Copy query"><i class="fas fa-copy"></i></button>
+            <button class="btn btn-sm btn-ghost btn-save-dork" data-query="{{ r.query }}" data-category="{{ cat }}" data-source="github" title="Save dork"><i class="fas fa-save"></i></button>
+          </td>
+        </tr>
+        {% endif %}
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endfor %}
+{% else %}
+<div class="empty-state">
+  <i class="fab fa-github"></i>
+  <p>Enter a domain above to load GitHub dorks.</p>
+</div>
+{% endif %}
+{% endblock %}

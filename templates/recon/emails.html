@@ -1,0 +1,64 @@
+{% extends "base.html" %}
+{% block title %}Email Harvester{% endblock %}
+{% block content %}
+<div class="page-header">
+  <h1 class="page-title"><i class="fas fa-envelope"></i> Email Harvester</h1>
+  <div class="page-actions">
+    <form method="GET" class="filter-form" id="email-filter">
+      <select name="target_id" class="form-input" onchange="this.form.submit()">
+        <option value="">All Targets</option>
+        {% for t in targets %}
+        <option value="{{ t.pk }}" {% if request.GET.target_id == t.pk|stringformat:"s" %}selected{% endif %}>{{ t.domain }}</option>
+        {% endfor %}
+      </select>
+      <button type="submit" class="btn btn-sm btn-ghost">Filter</button>
+    </form>
+    <a href="{% url 'recon:email_export' %}{% if request.GET.target_id %}?target_id={{ request.GET.target_id }}{% endif %}" class="btn btn-ghost" id="btn-export-emails"><i class="fas fa-download"></i> Export</a>
+  </div>
+</div>
+
+<div class="panel">
+  <div class="panel-body">
+    {% if emails %}
+    <div class="email-count-bar">
+      <span class="mono">{{ emails|length }} emails found</span>
+    </div>
+    <table class="table" id="emails-table">
+      <thead>
+        <tr>
+          <th>Target</th>
+          <th>Email</th>
+          <th>Source</th>
+          <th>Found</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for e in emails %}
+        <tr>
+          <td><a href="{% url 'targets:detail' e.target.pk %}">{{ e.target.domain }}</a></td>
+          <td class="mono">{{ e.email }}</td>
+          <td><span class="tag-badge">{{ e.source }}</span></td>
+          <td>{{ e.created_at|date:"Y-m-d H:i" }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    {% else %}
+    <div class="empty-state">
+      <i class="fas fa-envelope"></i>
+      <p>No emails harvested. Select a target and run email harvesting.</p>
+      <form method="POST" action="{% url 'recon:email_run' %}" class="inline-form">
+        {% csrf_token %}
+        <select name="target_id" class="form-input" required>
+          <option value="">Select target...</option>
+          {% for t in targets %}
+          <option value="{{ t.pk }}">{{ t.domain }}</option>
+          {% endfor %}
+        </select>
+        <button type="submit" class="btn btn-primary" id="btn-run-email-harvest"><i class="fas fa-play"></i> Harvest Emails</button>
+      </form>
+    </div>
+    {% endif %}
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+{% block title %}Reports{% endblock %}
+{% block content %}
+<div class="page-header">
+  <h1 class="page-title"><i class="fas fa-file-export"></i> Reports</h1>
+  <a href="{% url 'reporting:generate' %}" class="btn btn-primary" id="btn-generate-report"><i class="fas fa-plus"></i> Generate Report</a>
+</div>
+
+<div class="panel">
+  <div class="panel-body">
+    {% if reports %}
+    <table class="table">
+      <thead><tr><th>Title</th><th>Type</th><th>Target</th><th>Created</th><th>Actions</th></tr></thead>
+      <tbody>
+        {% for r in reports %}
+        <tr>
+          <td><a href="{% url 'reporting:detail' r.pk %}">{{ r.title|truncatechars:60 }}</a></td>
+          <td><span class="tag-badge">{{ r.get_report_type_display }}</span></td>
+          <td>{{ r.target.domain|default:"—" }}</td>
+          <td class="text-muted">{{ r.created_at|date:"Y-m-d H:i" }}</td>
+          <td>
+            <a href="{% url 'reporting:export_html' r.pk %}" class="btn btn-sm btn-ghost" title="Export HTML"><i class="fas fa-code"></i></a>
+            <a href="{% url 'reporting:export_json' r.pk %}" class="btn btn-sm btn-ghost" title="Export JSON"><i class="fas fa-file-code"></i></a>
+            <a href="{% url 'reporting:export_pdf' r.pk %}" class="btn btn-sm btn-ghost" title="Export PDF"><i class="fas fa-file-pdf"></i></a>
+            <form method="POST" action="{% url 'reporting:delete' r.pk %}" style="display:inline" class="inline-form">
+              {% csrf_token %}
+              <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Delete this report?')"><i class="fas fa-trash"></i></button>
+            </form>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    {% else %}
+    <div class="empty-state">
+      <i class="fas fa-file-export"></i>
+      <p>No reports yet. <a href="{% url 'reporting:generate' %}">Generate your first report</a></p>
+    </div>
+    {% endif %}
+  </div>
+</div>
+{% endblock %}

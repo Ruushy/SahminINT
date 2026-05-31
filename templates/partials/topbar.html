@@ -1,0 +1,33 @@
+<header class="topbar" id="topbar">
+  <div class="topbar-left">
+    <button class="btn-icon sidebar-toggle" id="sidebar-toggle" aria-label="Toggle sidebar">
+      <i class="fas fa-bars"></i>
+    </button>
+    <div class="search-wrapper">
+      <i class="fas fa-search search-icon"></i>
+      <form action="{% url 'dashboard:search' %}" method="GET" class="search-form" id="global-search-form">
+        <input type="text" name="q" class="search-input" id="global-search-input"
+               placeholder="Search targets, subdomains, dorks..." autocomplete="off">
+      </form>
+      <span class="search-hint"><kbd>/</kbd></span>
+    </div>
+  </div>
+
+  <div class="topbar-right">
+    <div class="passive-badge" id="passive-badge">
+      <span class="pulse-dot"></span>
+      <span>PASSIVE</span>
+    </div>
+    <a href="{% url 'targets:create' %}" class="btn btn-primary btn-sm" id="btn-add-target-topbar">
+      <i class="fas fa-plus"></i> New Target
+    </a>
+    <div class="avatar-dropdown" id="avatar-dropdown">
+      <a href="{% url 'users:profile' %}" class="avatar-link">
+        <div class="avatar">
+          <i class="fas fa-user"></i>
+        </div>
+        <span class="avatar-name">{{ user.username }}</span>
+      </a>
+    </div>
+  </div>
+</header>

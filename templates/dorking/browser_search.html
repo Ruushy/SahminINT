@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+{% block title %}Browser Search{% endblock %}
+{% block content %}
+<div class="page-header">
+  <h1 class="page-title"><i class="fas fa-globe"></i> Browser Search</h1>
+  <div class="page-actions">
+    <form method="GET" class="filter-form" id="search-domain-form">
+      <input type="text" name="domain" class="form-input" placeholder="Enter domain..." value="{{ domain }}" id="browser-search-input">
+      <button type="submit" class="btn btn-primary" id="btn-load-engines"><i class="fas fa-search"></i> Load Engines</button>
+    </form>
+  </div>
+</div>
+
+{% if engines %}
+<div class="engine-grid" id="engine-grid">
+  {% for eng in engines %}
+  <a href="{{ eng.url }}" target="_blank" rel="noopener" class="engine-card" id="engine-{{ eng.name|slugify }}">
+    <div class="engine-icon">
+      {% if "Google" in eng.name %}<i class="fab fa-google"></i>
+      {% elif "Bing" in eng.name %}<i class="fab fa-microsoft"></i>
+      {% elif "DuckDuckGo" in eng.name %}<i class="fas fa-search"></i>
+      {% elif "GitHub" in eng.name %}<i class="fab fa-github"></i>
+      {% elif "GitLab" in eng.name %}<i class="fab fa-gitlab"></i>
+      {% elif "Reddit" in eng.name %}<i class="fab fa-reddit"></i>
+      {% elif "Stack" in eng.name %}<i class="fab fa-stack-overflow"></i>
+      {% elif "Shodan" in eng.name %}<i class="fas fa-search-location"></i>
+      {% elif "Censys" in eng.name %}<i class="fas fa-shield"></i>
+      {% elif "crt" in eng.name %}<i class="fas fa-certificate"></i>
+      {% elif "Virus" in eng.name %}<i class="fas fa-virus"></i>
+      {% else %}<i class="fas fa-globe"></i>{% endif %}
+    </div>
+    <h4>{{ eng.name }}</h4>
+    <span class="btn btn-sm btn-primary">Open <i class="fas fa-external-link"></i></span>
+  </a>
+  {% endfor %}
+</div>
+<div class="open-all-bar">
+  <button class="btn btn-primary" id="btn-open-all-engines">Open All 12</button>
+</div>
+{% else %}
+<div class="empty-state">
+  <i class="fas fa-globe"></i>
+  <p>Enter a domain above to load search engines.</p>
+</div>
+{% endif %}
+{% endblock %}

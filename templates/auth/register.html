@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% block title %}SahminINT — Register{% endblock %}
+{% block content %}
+<div class="auth-page" id="auth-page">
+  <div class="auth-card" id="register-form">
+    <div class="auth-header">
+      <i class="fas fa-user-plus auth-icon"></i>
+      <h1>Create <span class="accent">Account</span></h1>
+    </div>
+    <form method="POST" action="{% url 'users:register' %}" class="auth-form">
+      {% csrf_token %}
+      <div class="form-group">
+        <label for="register-username"><i class="fas fa-user"></i> Username</label>
+        <input type="text" name="username" id="register-username" class="form-input" required autofocus placeholder="Choose a username">
+      </div>
+      <div class="form-group">
+        <label for="register-password1"><i class="fas fa-lock"></i> Password</label>
+        <input type="password" name="password1" id="register-password1" class="form-input" required placeholder="Enter password">
+      </div>
+      <div class="form-group">
+        <label for="register-password2"><i class="fas fa-lock"></i> Confirm Password</label>
+        <input type="password" name="password2" id="register-password2" class="form-input" required placeholder="Confirm password">
+      </div>
+      <button type="submit" class="btn btn-primary btn-block" id="btn-register">
+        <i class="fas fa-user-plus"></i> Register
+      </button>
+    </form>
+    <div class="auth-links">
+      <a href="{% url 'users:login' %}" class="auth-link">Already have an account? Sign in</a>
+    </div>
+  </div>
+</div>
+{% endblock %}

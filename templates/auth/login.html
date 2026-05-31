@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}SahminINT — Login{% endblock %}
+{% block content %}
+<div class="auth-page" id="auth-page">
+  <div class="auth-card" id="login-form">
+    <div class="auth-header">
+      <i class="fas fa-shield auth-icon"></i>
+      <h1>Sahmin<span class="accent">INT</span></h1>
+      <p class="auth-tagline">Built by <a href="https://ruushy.github.io/protfolio/" target="_blank" rel="noopener" class="accent-link">Ruushy</a> &middot; OSINT &amp; Security Research</p>
+    </div>
+
+    <form method="POST" action="{% url 'users:login' %}" class="auth-form">
+      {% csrf_token %}
+      <div class="form-group">
+        <label for="login-username"><i class="fas fa-user"></i> Username</label>
+        <input type="text" name="username" id="login-username" class="form-input" required autofocus placeholder="Enter username">
+      </div>
+      <div class="form-group">
+        <label for="login-password"><i class="fas fa-lock"></i> Password</label>
+        <input type="password" name="password" id="login-password" class="form-input" required placeholder="Enter password">
+      </div>
+      <button type="submit" class="btn btn-primary btn-block" id="btn-login">
+        <i class="fas fa-arrow-right"></i> Sign In
+      </button>
+    </form>
+
+    <div class="auth-links">
+      <a href="{% url 'users:register' %}" class="auth-link" id="link-register">Create Account</a>
+      <a href="{% url 'users:password_reset' %}" class="auth-link" id="link-reset">Forgot Password?</a>
+    </div>
+
+    <div class="author-social-bar">
+      <a href="https://ruushy.github.io/protfolio/" class="social-pill" target="_blank" rel="noopener"><i class="fas fa-briefcase"></i> Portfolio</a>
+      <a href="https://github.com/Ruushy" class="social-pill" target="_blank" rel="noopener"><i class="fab fa-github"></i> GitHub</a>
+      <a href="https://t.me/hacking_akhlaaqyin" class="social-pill" target="_blank" rel="noopener"><i class="fab fa-telegram"></i> Telegram</a>
+      <a href="https://discord.gg/55GhmhcSY" class="social-pill" target="_blank" rel="noopener"><i class="fab fa-discord"></i> Discord</a>
+      <a href="https://instagram.com/arkani659" class="social-pill" target="_blank" rel="noopener"><i class="fab fa-instagram"></i> Instagram</a>
+    </div>
+  </div>
+</div>
+{% endblock %}

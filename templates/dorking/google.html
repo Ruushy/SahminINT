@@ -1,0 +1,61 @@
+{% extends "base.html" %}
+{% block title %}Google Dorks{% endblock %}
+{% block content %}
+<div class="page-header">
+  <h1 class="page-title"><i class="fab fa-google"></i> Google Dorks</h1>
+  <div class="page-actions">
+    <form method="GET" class="filter-form" id="dork-domain-form">
+      <input type="text" name="domain" class="form-input" placeholder="Enter domain..." value="{{ domain }}" id="dork-domain-input">
+      <button type="submit" class="btn btn-primary" id="btn-load-dorks"><i class="fas fa-search"></i> Load Dorks</button>
+    </form>
+  </div>
+</div>
+
+{% if results %}
+<div class="dork-categories-nav" id="dork-categories">
+  {% for cat in categories %}
+  <a href="#cat-{{ forloop.counter }}" class="btn btn-sm btn-ghost">{{ cat }}</a>
+  {% endfor %}
+</div>
+
+{% for cat in categories %}
+<div class="section-header" id="cat-{{ forloop.counter }}">
+  <h3><i class="fas fa-tag"></i> {{ cat }}</h3>
+</div>
+<div class="panel">
+  <div class="panel-body">
+    <table class="table dork-table" data-category="{{ cat }}">
+      <thead><tr><th>Query</th><th>Actions</th></tr></thead>
+      <tbody>
+        {% for r in results %}
+        {% if r.category == cat %}
+        <tr class="dork-row">
+          <td class="mono dork-query-text">{{ r.query }}</td>
+          <td class="dork-actions">
+            <a href="{{ r.google }}" target="_blank" rel="noopener" class="btn btn-sm btn-ghost" title="Open in Google"><i class="fab fa-google"></i></a>
+            <a href="{{ r.bing }}" target="_blank" rel="noopener" class="btn btn-sm btn-ghost" title="Open in Bing"><i class="fab fa-microsoft"></i></a>
+            <a href="{{ r.duckduckgo }}" target="_blank" rel="noopener" class="btn btn-sm btn-ghost" title="Open in DuckDuckGo"><i class="fas fa-search"></i></a>
+            <button class="btn btn-sm btn-ghost btn-copy" data-copy="{{ r.query }}" title="Copy query"><i class="fas fa-copy"></i></button>
+            <button class="btn btn-sm btn-ghost btn-save-dork" data-query="{{ r.query }}" data-category="{{ cat }}" title="Save dork"><i class="fas fa-save"></i></button>
+          </td>
+        </tr>
+        {% endif %}
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endfor %}
+
+<div class="open-all-bar">
+  <button class="btn btn-primary" id="btn-open-all-google" data-engine="google" data-warn-limit="12">Open All in Google</button>
+  <button class="btn btn-ghost" id="btn-open-all-bing" data-engine="bing">Open All in Bing</button>
+  <button class="btn btn-ghost" id="btn-open-all-duckduckgo" data-engine="duckduckgo">Open All in DDG</button>
+</div>
+{% else %}
+<div class="empty-state">
+  <i class="fab fa-google"></i>
+  <p>Enter a domain above to load Google dorks.</p>
+</div>
+{% endif %}
+{% endblock %}

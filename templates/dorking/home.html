@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% block title %}Dorking{% endblock %}
+{% block content %}
+<div class="page-header">
+  <h1 class="page-title"><i class="fas fa-search"></i> Dorking Suite</h1>
+  <p class="page-subtitle">Google and GitHub dork catalogs with browser-assisted searching</p>
+</div>
+
+<div class="dork-categories-grid">
+  <a href="{% url 'dorking:google' %}" class="dork-category-card" id="card-google-dorks">
+    <div class="dork-card-icon"><i class="fab fa-google"></i></div>
+    <h3>Google Dorks</h3>
+    <p>60+ pre-built queries across 10 categories</p>
+    <span class="btn btn-sm btn-primary">Browse <i class="fas fa-arrow-right"></i></span>
+  </a>
+  <a href="{% url 'dorking:github' %}" class="dork-category-card" id="card-github-dorks">
+    <div class="dork-card-icon"><i class="fab fa-github"></i></div>
+    <h3>GitHub Dorks</h3>
+    <p>Code-search dorks for secrets, tokens, configs</p>
+    <span class="btn btn-sm btn-primary">Browse <i class="fas fa-arrow-right"></i></span>
+  </a>
+  <a href="{% url 'dorking:browser_search' %}" class="dork-category-card" id="card-browser-search">
+    <div class="dork-card-icon"><i class="fas fa-globe"></i></div>
+    <h3>Browser Search</h3>
+    <p>Search 12 engines simultaneously</p>
+    <span class="btn btn-sm btn-primary">Open <i class="fas fa-arrow-right"></i></span>
+  </a>
+  <a href="{% url 'dorking:saved' %}" class="dork-category-card" id="card-saved-dorks">
+    <div class="dork-card-icon"><i class="fas fa-bookmark"></i></div>
+    <h3>Saved Dorks</h3>
+    <p>Your saved search queries</p>
+    <span class="btn btn-sm btn-primary">View <i class="fas fa-arrow-right"></i></span>
+  </a>
+</div>
+{% endblock %}

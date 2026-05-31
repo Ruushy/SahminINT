@@ -1,0 +1,103 @@
+{% extends "base.html" %}
+{% block title %}Settings{% endblock %}
+{% block content %}
+<div class="page-header">
+  <h1 class="page-title"><i class="fas fa-cog"></i> Settings</h1>
+</div>
+<form method="POST" action="{% url 'users:settings' %}" class="settings-form">
+  {% csrf_token %}
+
+  <div class="panel">
+    <div class="panel-header"><h3><i class="fas fa-user"></i> Profile</h3></div>
+    <div class="panel-body">
+      <div class="form-group">
+        <label for="id-bio">Bio</label>
+        <textarea name="bio" id="id-bio" class="form-input" rows="3">{{ profile.bio }}</textarea>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label for="id-timezone">Timezone</label>
+          <input type="text" name="timezone" id="id-timezone" class="form-input" value="{{ profile.timezone }}">
+        </div>
+        <div class="form-group">
+          <label for="id-theme">Theme</label>
+          <select name="theme" id="id-theme" class="form-input">
+            <option value="dark" {% if profile.theme == 'dark' %}selected{% endif %}>Dark</option>
+            <option value="light" {% if profile.theme == 'light' %}selected{% endif %}>Light</option>
+          </select>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="panel">
+    <div class="panel-header"><h3><i class="fas fa-sliders-h"></i> Preferences</h3></div>
+    <div class="panel-body">
+      <div class="form-row">
+        <div class="form-group">
+          <label for="id-page-size">Page Size</label>
+          <select name="page_size" id="id-page-size" class="form-input">
+            {% for k, v in PAGE_SIZE_CHOICES %}
+            <option value="{{ k }}" {% if settings.page_size == k %}selected{% endif %}>{{ v }}</option>
+            {% endfor %}
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="id-dork-engine">Default Dork Engine</label>
+          <select name="default_dork_engine" id="id-dork-engine" class="form-input">
+            {% for k, v in DEFAULT_DORK_ENGINE_CHOICES %}
+            <option value="{{ k }}" {% if settings.default_dork_engine == k %}selected{% endif %}>{{ v }}</option>
+            {% endfor %}
+          </select>
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="checkbox-label">
+          <input type="checkbox" name="auto_open_results" {% if settings.auto_open_results %}checked{% endif %}>
+          <span>Auto-open results</span>
+        </label>
+      </div>
+    </div>
+  </div>
+
+  <div class="panel">
+    <div class="panel-header"><h3><i class="fas fa-key"></i> API Keys (optional)</h3></div>
+    <div class="panel-body">
+      <div class="form-row">
+        <div class="form-group">
+          <label for="id-shodan">Shodan API Key</label>
+          <input type="password" name="shodan_api_key" id="id-shodan" class="form-input" value="{{ settings.shodan_api_key }}" placeholder="Leave blank to skip">
+        </div>
+        <div class="form-group">
+          <label for="id-censys-id">Censys API ID</label>
+          <input type="password" name="censys_api_id" id="id-censys-id" class="form-input" value="{{ settings.censys_api_id }}" placeholder="Leave blank to skip">
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label for="id-censys-secret">Censys API Secret</label>
+          <input type="password" name="censys_api_secret" id="id-censys-secret" class="form-input" value="{{ settings.censys_api_secret }}" placeholder="Leave blank to skip">
+        </div>
+        <div class="form-group">
+          <label for="id-virustotal">VirusTotal API Key</label>
+          <input type="password" name="virustotal_api_key" id="id-virustotal" class="form-input" value="{{ settings.virustotal_api_key }}" placeholder="Leave blank to skip">
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label for="id-github">GitHub API Key</label>
+          <input type="password" name="github_api_key" id="id-github" class="form-input" value="{{ settings.github_api_key }}" placeholder="Leave blank to skip">
+        </div>
+        <div class="form-group">
+          <label for="id-securitytrails">SecurityTrails API Key</label>
+          <input type="password" name="securitytrails_api_key" id="id-securitytrails" class="form-input" value="{{ settings.securitytrails_api_key }}" placeholder="Leave blank to skip">
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="form-actions">
+    <button type="submit" class="btn btn-primary" id="btn-save-settings"><i class="fas fa-save"></i> Save Settings</button>
+  </div>
+</form>
+{% endblock %}

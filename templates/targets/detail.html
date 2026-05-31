@@ -1,0 +1,106 @@
+{% extends "base.html" %}
+{% block title %}{{ target.domain }}{% endblock %}
+{% block content %}
+<div class="page-header">
+  <h1 class="page-title mono"><i class="fas fa-crosshairs"></i> {{ target.domain }}</h1>
+  <div class="page-actions">
+    <button class="btn-icon favorite-toggle {% if target.is_favorite %}active{% endif %}"
+            data-target-id="{{ target.pk }}" id="fav-detail-{{ target.pk }}">
+      <i class="{% if target.is_favorite %}fas{% else %}far{% endif %} fa-star"></i>
+    </button>
+    <a href="{% url 'targets:update' target.pk %}" class="btn btn-sm btn-ghost">Edit</a>
+    <form method="POST" action="{% url 'targets:delete' target.pk %}" style="display:inline" class="inline-form">
+      {% csrf_token %}
+      <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Delete?')">Delete</button>
+    </form>
+  </div>
+</div>
+
+<!-- Tags -->
+<div class="tags-row">
+  {% for tag in target.tags.all %}
+  <span class="tag-badge" style="border-color: {{ tag.color }};">{{ tag.name }}</span>
+  {% empty %}
+  <span class="text-muted">No tags</span>
+  {% endfor %}
+</div>
+
+<!-- Stat mini-cards -->
+<div class="stat-grid mini">
+  <div class="stat-card"><div class="stat-content"><span class="stat-number">{{ target.scan_count }}</span><span class="stat-label">Scans</span></div></div>
+  <div class="stat-card"><div class="stat-content"><span class="stat-number">{{ target.subdomains.count }}</span><span class="stat-label">Subdomains</span></div></div>
+  <div class="stat-card"><div class="stat-content"><span class="stat-number">{{ target.dns_records.count }}</span><span class="stat-label">DNS</span></div></div>
+</div>
+
+<!-- Notes -->
+<div class="panel">
+  <div class="panel-header"><h3><i class="fas fa-sticky-note"></i> Notes</h3></div>
+  <div class="panel-body">
+    <form method="POST" action="{% url 'targets:add_note' target.pk %}" class="inline-form">
+      {% csrf_token %}
+      <div class="input-row">
+        <input type="text" name="content" class="form-input" placeholder="Add a note..." required id="note-input-{{ target.pk }}">
+        <button type="submit" class="btn btn-sm btn-primary">Add</button>
+      </div>
+    </form>
+    {% for note in target.target_notes.all %}
+    <div class="note-item">
+      <p>{{ note.content }}</p>
+      <span class="text-dim">{{ note.created_at|timesince }} ago</span>
+    </div>
+    {% empty %}
+    <p class="text-muted">No notes yet.</p>
+    {% endfor %}
+  </div>
+</div>
+
+<!-- Recon Actions -->
+<div class="section-header"><h2><i class="fas fa-radar"></i> Recon Tools</h2></div>
+<div class="recon-actions-grid">
+  <form method="POST" action="{% url 'recon:subdomain_run' %}" class="inline-form">
+    {% csrf_token %}
+    <input type="hidden" name="target_id" value="{{ target.pk }}">
+    <button type="submit" class="btn btn-primary" id="btn-run-subdomains-{{ target.pk }}">
+      <i class="fas fa-sitemap"></i> Subdomains
+    </button>
+  </form>
+  <form method="POST" action="{% url 'recon:dns_run' %}" class="inline-form">
+    {% csrf_token %}
+    <input type="hidden" name="target_id" value="{{ target.pk }}">
+    <button type="submit" class="btn btn-primary" id="btn-run-dns-{{ target.pk }}">
+      <i class="fas fa-network-wired"></i> DNS
+    </button>
+  </form>
+  <a href="{% url 'reporting:generate' %}?target_id={{ target.pk }}" class="btn btn-primary" id="btn-report-{{ target.pk }}">
+    <i class="fas fa-file-export"></i> Generate Report
+  </a>
+</div>
+
+<!-- Embedded Recon Results -->
+{% with subs=target.subdomains.all %}
+{% if subs %}
+<div class="section-header"><h3><i class="fas fa-sitemap"></i> Subdomains ({{ subs|length }})</h3></div>
+<div class="panel"><div class="panel-body">
+  <pre class="mono">{% for s in subs %}{{ s.host }}
+{% endfor %}</pre>
+</div></div>
+{% endif %}
+{% endwith %}
+
+{% with dns=target.dns_records.all %}
+{% if dns %}
+<div class="section-header"><h3><i class="fas fa-network-wired"></i> DNS Records ({{ dns|length }})</h3></div>
+<div class="panel"><div class="panel-body">
+  <table class="table">
+    <thead><tr><th>Type</th><th>Value</th></tr></thead>
+    <tbody>
+      {% for r in dns %}
+      <tr><td class="mono">{{ r.record_type }}</td><td class="mono">{{ r.value|truncatechars:100 }}</td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div></div>
+{% endif %}
+{% endwith %}
+
+{% endblock %}

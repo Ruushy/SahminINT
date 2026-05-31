@@ -1,0 +1,98 @@
+<aside class="sidebar" id="sidebar">
+  <div class="sidebar-brand">
+    <a href="{% url 'dashboard:home' %}">
+      <i class="fas fa-shield"></i>
+      <span class="brand-text">Sahmin<span class="accent">INT</span></span>
+    </a>
+  </div>
+
+  <nav class="sidebar-nav">
+    <div class="nav-section">
+      <span class="nav-section-label">Workspace</span>
+      <a href="{% url 'dashboard:home' %}" class="nav-item" id="nav-dashboard" data-shortcut="d">
+        <i class="fas fa-th-large"></i><span>Dashboard</span>
+      </a>
+      <a href="{% url 'targets:list' %}" class="nav-item" id="nav-targets" data-shortcut="t">
+        <i class="fas fa-crosshairs"></i><span>Targets</span>
+      </a>
+      <a href="{% url 'targets:search_history' %}" class="nav-item" id="nav-search-history">
+        <i class="fas fa-history"></i><span>Search History</span>
+      </a>
+    </div>
+
+    <div class="nav-section">
+      <span class="nav-section-label">Dorking</span>
+      <a href="{% url 'dorking:home' %}" class="nav-item" id="nav-dorking">
+        <i class="fas fa-search"></i><span>Dorking</span>
+      </a>
+      <a href="{% url 'dorking:google' %}" class="nav-item" id="nav-google-dorks">
+        <i class="fab fa-google"></i><span>Google Dorks</span>
+      </a>
+      <a href="{% url 'dorking:github' %}" class="nav-item" id="nav-github-dorks">
+        <i class="fab fa-github"></i><span>GitHub Dorks</span>
+      </a>
+      <a href="{% url 'dorking:browser_search' %}" class="nav-item" id="nav-browser-search">
+        <i class="fas fa-globe"></i><span>Browser Search</span>
+      </a>
+      <a href="{% url 'dorking:saved' %}" class="nav-item" id="nav-saved-dorks">
+        <i class="fas fa-bookmark"></i><span>Saved Dorks</span>
+      </a>
+    </div>
+
+    <div class="nav-section">
+      <span class="nav-section-label">Passive Recon</span>
+      <a href="{% url 'recon:recon_home' %}" class="nav-item" id="nav-recon">
+        <i class="fas fa-radar"></i><span>Recon Tools</span>
+      </a>
+      <a href="{% url 'recon:subdomain_list' %}" class="nav-item" id="nav-subdomains" data-shortcut="s">
+        <i class="fas fa-sitemap"></i><span>Subdomains</span>
+      </a>
+      <a href="{% url 'recon:dns_list' %}" class="nav-item" id="nav-dns">
+        <i class="fas fa-network-wired"></i><span>DNS Records</span>
+      </a>
+      <a href="{% url 'recon:ssl_list' %}" class="nav-item" id="nav-ssl">
+        <i class="fas fa-lock"></i><span>SSL / TLS</span>
+      </a>
+      <a href="{% url 'recon:email_list' %}" class="nav-item" id="nav-emails">
+        <i class="fas fa-envelope"></i><span>Email Harvester</span>
+      </a>
+    </div>
+
+    <div class="nav-section">
+      <span class="nav-section-label">Reports</span>
+      <a href="{% url 'reporting:list' %}" class="nav-item" id="nav-reports" data-shortcut="r">
+        <i class="fas fa-file-export"></i><span>Reports</span>
+      </a>
+      <a href="{% url 'reporting:generate' %}" class="nav-item" id="nav-generate-report">
+        <i class="fas fa-plus-circle"></i><span>Generate Report</span>
+      </a>
+    </div>
+
+    <div class="nav-section">
+      <span class="nav-section-label">Account</span>
+      <a href="{% url 'users:profile' %}" class="nav-item" id="nav-profile">
+        <i class="fas fa-user"></i><span>Profile</span>
+      </a>
+      <a href="{% url 'users:settings' %}" class="nav-item" id="nav-settings">
+        <i class="fas fa-cog"></i><span>Settings</span>
+      </a>
+      <a href="{% url 'users:logout' %}" class="nav-item" id="nav-logout">
+        <i class="fas fa-sign-out-alt"></i><span>Logout</span>
+      </a>
+    </div>
+  </nav>
+
+  <div class="sidebar-footer">
+    <div class="author-credit">
+      <span class="credit-text">Built by</span>
+      <a href="https://ruushy.github.io/protfolio/" class="credit-name" id="author-portfolio" target="_blank" rel="noopener">Ruushy</a>
+    </div>
+    <div class="social-links">
+      <a href="https://ruushy.github.io/protfolio/" id="social-portfolio" target="_blank" rel="noopener" title="Portfolio"><i class="fas fa-briefcase"></i></a>
+      <a href="https://github.com/Ruushy" id="social-github" target="_blank" rel="noopener" title="GitHub"><i class="fab fa-github"></i></a>
+      <a href="https://t.me/hacking_akhlaaqyin" id="social-telegram" target="_blank" rel="noopener" title="Telegram"><i class="fab fa-telegram"></i></a>
+      <a href="https://discord.gg/55GhmhcSY" id="social-discord" target="_blank" rel="noopener" title="Discord"><i class="fab fa-discord"></i></a>
+      <a href="https://instagram.com/arkani659" id="social-instagram" target="_blank" rel="noopener" title="Instagram"><i class="fab fa-instagram"></i></a>
+    </div>
+  </div>
+</aside>

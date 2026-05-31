@@ -1,0 +1,85 @@
+{% extends "base.html" %}
+{% block title %}Targets{% endblock %}
+{% block content %}
+<div class="page-header">
+  <h1 class="page-title"><i class="fas fa-crosshairs"></i> Targets</h1>
+  <div class="page-actions">
+    <a href="{% url 'targets:create' %}" class="btn btn-primary" id="btn-add-target"><i class="fas fa-plus"></i> New Target</a>
+  </div>
+</div>
+
+<div class="panel quick-add-panel">
+  <div class="panel-body">
+    <form method="POST" action="{% url 'targets:create' %}" class="inline-form" id="quick-add-form">
+      {% csrf_token %}
+      <div class="input-row">
+        <input type="text" name="domain" class="form-input" placeholder="Enter domain (e.g. example.com)" required id="quick-domain-input" autofocus>
+        <input type="text" name="tags" class="form-input" placeholder="Tags (optional, comma-sep)" id="quick-tags-input" style="max-width:200px">
+        <button type="submit" class="btn btn-primary" id="btn-quick-add"><i class="fas fa-plus"></i> Add</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<div class="page-actions" style="margin-bottom:1rem">
+  <form method="GET" class="filter-form" id="target-filter-form">
+    <input type="text" name="q" class="form-input" placeholder="Filter by domain..." value="{{ query }}" id="filter-targets">
+    <label class="checkbox-label">
+      <input type="checkbox" name="favorites" value="1" {% if favorites_only %}checked{% endif %} onchange="this.form.submit()">
+      <span>Favorites only</span>
+    </label>
+  </form>
+</div>
+
+<div class="panel">
+  <div class="panel-body">
+    {% if targets %}
+    <table class="table" id="targets-table">
+      <thead>
+        <tr>
+          <th>Domain</th>
+          <th>Tags</th>
+          <th>Scans</th>
+          <th>Favorite</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for t in targets %}
+        <tr>
+          <td class="mono">
+            <a href="{% url 'targets:detail' t.pk %}">{{ t.domain }}</a>
+          </td>
+          <td>
+            {% for tag in t.tags.all %}
+            <span class="tag-badge" style="border-color: {{ tag.color }};">{{ tag.name }}</span>
+            {% endfor %}
+          </td>
+          <td>{{ t.scan_count }}</td>
+          <td>
+            <button class="btn-icon favorite-toggle {% if t.is_favorite %}active{% endif %}"
+                    data-target-id="{{ t.pk }}" id="fav-{{ t.pk }}">
+              <i class="{% if t.is_favorite %}fas{% else %}far{% endif %} fa-star"></i>
+            </button>
+          </td>
+          <td>
+            <a href="{% url 'targets:detail' t.pk %}" class="btn btn-sm btn-ghost">View</a>
+            <a href="{% url 'targets:update' t.pk %}" class="btn btn-sm btn-ghost">Edit</a>
+            <form method="POST" action="{% url 'targets:delete' t.pk %}" style="display:inline" class="inline-form">
+              {% csrf_token %}
+              <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Delete this target?')">Delete</button>
+            </form>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    {% else %}
+    <div class="empty-state">
+      <i class="fas fa-crosshairs"></i>
+      <p>No targets yet. <a href="{% url 'targets:create' %}">Add your first target</a></p>
+    </div>
+    {% endif %}
+  </div>
+</div>
+{% endblock %}

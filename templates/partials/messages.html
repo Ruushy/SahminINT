@@ -1,0 +1,7 @@
+{% if messages %}
+<div id="django-messages" style="display:none;">
+  {% for message in messages %}
+  <div class="toast-data" data-level="{{ message.level_tag }}" data-message="{{ message }}"></div>
+  {% endfor %}
+</div>
+{% endif %}

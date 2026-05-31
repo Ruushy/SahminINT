@@ -1,0 +1,93 @@
+{% extends "base.html" %}
+{% block title %}Search Results{% endblock %}
+{% block content %}
+<div class="page-header">
+  <h1 class="page-title"><i class="fas fa-search"></i> Search Results</h1>
+  <p class="page-subtitle">Showing results for "<span class="accent mono">{{ query }}</span>"</p>
+</div>
+
+<div class="search-results-grid">
+  {% if results.targets %}
+  <div class="panel">
+    <div class="panel-header"><h3><i class="fas fa-crosshairs"></i> Targets ({{ results.targets|length }})</h3></div>
+    <div class="panel-body">
+      <table class="table">
+        <thead><tr><th>Domain</th><th>Favorite</th></tr></thead>
+        <tbody>
+          {% for t in results.targets %}
+          <tr>
+            <td><a href="{% url 'targets:detail' t.pk %}" class="mono">{{ t.domain }}</a></td>
+            <td>{% if t.is_favorite %}<i class="fas fa-star" style="color:var(--warn)"></i>{% endif %}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+  {% endif %}
+
+  {% if results.subdomains %}
+  <div class="panel">
+    <div class="panel-header"><h3><i class="fas fa-sitemap"></i> Subdomains ({{ results.subdomains|length }})</h3></div>
+    <div class="panel-body">
+      <table class="table">
+        <thead><tr><th>Host</th><th>Target</th></tr></thead>
+        <tbody>
+          {% for s in results.subdomains %}
+          <tr>
+            <td class="mono">{{ s.host }}</td>
+            <td><a href="{% url 'targets:detail' s.target.pk %}">{{ s.target.domain }}</a></td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+  {% endif %}
+
+  {% if results.dorks %}
+  <div class="panel">
+    <div class="panel-header"><h3><i class="fas fa-search"></i> Dorks ({{ results.dorks|length }})</h3></div>
+    <div class="panel-body">
+      <table class="table">
+        <thead><tr><th>Query</th><th>Category</th></tr></thead>
+        <tbody>
+          {% for d in results.dorks %}
+          <tr>
+            <td class="mono">{{ d.query|truncatechars:80 }}</td>
+            <td>{{ d.category }}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+  {% endif %}
+
+  {% if results.reports %}
+  <div class="panel">
+    <div class="panel-header"><h3><i class="fas fa-file-export"></i> Reports ({{ results.reports|length }})</h3></div>
+    <div class="panel-body">
+      <table class="table">
+        <thead><tr><th>Title</th><th>Type</th></tr></thead>
+        <tbody>
+          {% for r in results.reports %}
+          <tr>
+            <td><a href="{% url 'reporting:detail' r.pk %}">{{ r.title }}</a></td>
+            <td>{{ r.report_type }}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+  {% endif %}
+
+  {% if not results.targets and not results.subdomains and not results.dorks and not results.reports %}
+  <div class="empty-state full-width">
+    <i class="fas fa-search"></i>
+    <p>No results found for "{{ query }}"</p>
+  </div>
+  {% endif %}
+</div>
+{% endblock %}

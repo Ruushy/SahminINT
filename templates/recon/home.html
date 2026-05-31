@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% block title %}SahminINT — Recon Tools{% endblock %}
+{% block content %}
+<div class="page-header">
+  <h1 class="page-title"><i class="fas fa-radar"></i> Passive Reconnaissance</h1>
+  <p class="page-subtitle">Select a recon module below</p>
+</div>
+
+<div class="recon-tools-grid" id="recon-tools-grid">
+  <a href="{% url 'recon:subdomain_list' %}" class="recon-tool-card" id="card-subdomains">
+    <div class="tool-icon"><i class="fas fa-sitemap"></i></div>
+    <h3>Subdomain Enumeration</h3>
+    <p>Aggregate subdomains from 8 passive sources: crt.sh, AlienVault, HackerTarget, RapidDNS, BufferOver, Wayback CDX, CertSpotter, URLScan.</p>
+  </a>
+  <a href="{% url 'recon:dns_list' %}" class="recon-tool-card" id="card-dns">
+    <div class="tool-icon"><i class="fas fa-network-wired"></i></div>
+    <h3>DNS Records</h3>
+    <p>Query A, AAAA, MX, TXT, NS, CNAME, SOA, SRV, CAA records with TTL values.</p>
+  </a>
+  <a href="{% url 'recon:ssl_list' %}" class="recon-tool-card" id="card-ssl">
+    <div class="tool-icon"><i class="fas fa-lock"></i></div>
+    <h3>SSL / TLS Check</h3>
+    <p>Check certificates across common HTTPS ports, extract SAN, expiry, and issuer.</p>
+  </a>
+  <a href="{% url 'recon:email_list' %}" class="recon-tool-card" id="card-emails">
+    <div class="tool-icon"><i class="fas fa-envelope"></i></div>
+    <h3>Email Harvester</h3>
+    <p>Harvest emails from search engine results and public sources.</p>
+  </a>
+</div>
+{% endblock %}
