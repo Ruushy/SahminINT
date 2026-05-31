@@ -212,9 +212,9 @@ The application will automatically create an admin superuser on first startup if
 ### Default Credentials
 | Field | Value |
 |-------|-------|
-| Username | `admin` |
-| Password | `Recon@2026` |
-| Email | `admin@sahminint.local` |
+| Username | `arkani` |
+| Password | `python123` |
+
 
 ---
 
